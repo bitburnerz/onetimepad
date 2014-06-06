@@ -1,25 +1,19 @@
 #One Time Pad
 
-##Philosophy
-
-###General Usage
+#General Usage
 A series of random numbers is shared between two parties and exchanged in person or over a secure channel. It is the secret key common to both parties. One copy is used for encryption while the other for decryption.
 
 When communicating over an unsecure channel, in order to send a message, the first person would perform encryption by *adding* the value of the plain text message to the value of the shared key. This produces the cipher text. On the receiving end, to perform decryption, the cipher text received is *substracted* by the the value of the shared key. This reproduces the original plain text message.
 
-###Complementary Pads
+#Complementary Pads
 
 Because substraction is tedious and for sake of simplicity, what would be greatly helpful is if *both* parties could simply use addition.
 
 Typically, the two copies of the shared secret key are identical. One is used for encryption by addition, and the other for decryption by substraction.
 
-In order to enable us to perform addition on *both* ends and come up with the same result, then another factor this to change, and this will be the composition of the secret key. Instead of being identical on both ends, they will now be different for the person performing encryption and performing decryption, but still complementary.
+In order to enable us to perform addition on *both* ends and come up with the same result, then another factor needs to change, and this will be the composition of the secret key. Instead on the two copies being identical on both ends, they will now be different, but complementary.
 
-
-
-
-
-###Using digits over letters
+#Using digits over letters
 It is quicker and easier to encrypt and decrypt by hand i
 
 
