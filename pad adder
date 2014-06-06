@@ -1,0 +1,81 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<script language="javascript" type="text/javascript">
+
+
+
+//=============================================================================
+// 
+//=============================================================================
+function createPads() {
+  var paddata1 = document.getElementById('paddata1').value;
+  var paddata2 = document.getElementById('paddata2').value;
+
+  var padresult = 0;
+
+  paddata1 = filter(paddata1);
+  paddata2 = filter(paddata2);
+  
+  if(paddata1.length == paddata2.length) {
+    padresult = add(paddata1, paddata2);
+    document.getElementById('padresult').value = padresult;
+  } else {
+    alert("Pads not the same length !");
+  }
+
+}
+
+
+
+//=============================================================================
+//
+//=============================================================================
+
+
+//=============================================================================
+// Takes input string and filters out everything that is not numerical (0 to 9)
+//=============================================================================
+function filter(stringIn) {
+  stringOut = "";
+
+  for(x=0; x < stringIn.length; x++) {
+
+    if((stringIn.charCodeAt(x) >= 48) && (stringIn.charCodeAt(x) <= 57)) {
+      stringOut += stringIn.charAt(x);
+    } 
+  }
+  return(stringOut);
+}
+
+//=============================================================================
+// Adds numerical values of two strings (base 10) for encryption/decryption
+//=============================================================================
+function add(string1, string2) {
+  var stringOut = "";  
+
+  //if(string2 < string1)
+
+  for(x=0; x < string1.length; x++) {
+    stringOut += ((string1.charCodeAt(x) - 48) + (string2.charCodeAt(x) - 48)) % 10;
+  }
+
+  return(stringOut);
+}
+
+
+</script>
+
+<html>
+<head>
+<title>Pad Adder</title>
+</head>
+<body>
+<p><h2>Pad Adder</h2></p>
+<textarea id="paddata1" cols="80" rows="10" wrap="virtual"></textarea>
+<textarea id="paddata2" cols="80" rows="10" wrap="virtual"></textarea>
+<textarea id="padresult" cols="80" rows="10" wrap="virtual"></textarea>
+<input type="button" value="Create Pad" onClick="createPads();" />
+</body>
+</html>
