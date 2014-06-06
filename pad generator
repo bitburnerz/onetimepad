@@ -1,0 +1,150 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<script language="javascript" type="text/javascript">
+
+
+
+//=============================================================================
+//
+//=============================================================================
+function createPads()
+{
+ var rawdata = document.getElementById('rawdata').value;
+ var charsperpad = document.getElementById('charsperpad').value;
+ var padnumstart = document.getElementById('padnumstart').value;
+
+ var popupenc = window.open('','encryptpads','scrollbars=yes,height=400,width=500');
+ var popupdec = window.open('','decryptpads','scrollbars=yes,height=400,width=500');
+
+ var encryptpaddata = "";
+ var decryptpaddata = "";
+ var numsofpads = 0;
+ 
+ rawdata = filter(rawdata);
+ decryptpaddata = rawdata;
+ encryptpaddata = convert(rawdata);
+ numsofpads = rawdata.length / charsperpad;    
+ //round off to higher number if decimals
+
+ popupenc.document.write('<html><head><title>Encryption Pads</title></head><body>');
+ popupdec.document.write('<html><head><title>Decryption Pads</title></head><body>');
+
+ popupenc.document.write('<pre>');
+ popupdec.document.write('<pre>');
+
+
+ for(x=0; x < numsofpads; x++)
+ {
+   popupenc.document.write('<table><tr><td><center><b>' + (padnumstart + x) + '</b></center></td></tr>');
+   popupdec.document.write('<table><tr><td><center><b>' + (padnumstart + x) + '</b></center></td></tr>');
+
+   // add pad header
+   // ecryptionpads += "##### DECRYPTION PAD " + (padnumstart + x) + " #####\n\n";
+   // encryptionpads += "##### ENCRYPTION PAD " + (padnumstart + x) + " #####\n\n";
+ 
+   // get pad substrings
+   popupenc.document.write('<tr><td>' + (format(encryptpaddata.substr(charsperpad * x, charsperpad), 5,0)) + '</td></tr>');
+   popupdec.document.write('<tr><td>' + (format(decryptpaddata.substr(charsperpad * x, charsperpad), 5,0)) + '</td></tr>');
+
+   popupenc.document.write('<tr></tr></table>');
+   popupdec.document.write('<tr></tr></table>');
+
+ }      
+ popupenc.document.write('</pre>');
+ popupdec.document.write('</pre>');
+
+ popupenc.document.write('</body></html>');
+ popupdec.document.write('</body></html>');
+
+}
+
+
+
+//=============================================================================
+//
+//=============================================================================
+
+
+
+//=============================================================================
+// Takes input string and converts the numbers to corresponding complementary numbers
+//=============================================================================
+function convert(stringIn) {
+ var stringOut = "";
+ var table = new Array('0', '9', '8', '7', '6', '5', '4', '3', '2', '1');
+
+ for(x=0; x < stringIn.length; x++) {
+   stringOut += table[stringIn.charAt(x)];
+ }
+
+ return(stringOut);
+}
+
+
+//=============================================================================
+// Divides string into character groups
+//=============================================================================
+function format(stringIn, groupelength, linelength) {
+ var stringOut = "";
+ var x=0;
+
+ while (x < stringIn.length) {
+   stringOut += stringIn.charAt(x);
+   x++;  
+   if(x%groupelength == 0) {
+     stringOut += " ";
+   }
+ }
+ return(stringOut);
+
+}
+
+
+//=============================================================================
+// Takes input string and filters out everything that is not numerical (0 to 9)
+//=============================================================================
+function filter(stringIn) {
+ stringOut = "";
+
+ for(x=0; x < stringIn.length; x++) {
+
+   if((stringIn.charCodeAt(x) >= 48) && (stringIn.charCodeAt(x) <= 57)) {
+     stringOut += stringIn.charAt(x);
+   }
+ }
+ return(stringOut);
+}
+
+//=============================================================================
+// Adds numerical values of two strings (base 10) for encryption/decryption
+//=============================================================================
+function add(string1, string2) {
+ var stringOut = "";  
+
+ //if(string2 < string1)
+
+ for(x=0; x < string1.length; x++) {
+   stringOut += ((string1.charCodeAt(x) - 48) + (string2.charCodeAt(x) - 48)) % 10;
+ }
+
+ return(stringOut);
+}
+
+
+</script>
+
+<html>
+<head>
+<title>OTP Generator</title>
+</head>
+<body>
+<p>One Time Pad Generator</p>
+
+<textarea id="rawdata" cols="80" rows="10" wrap="virtual"></textarea>
+<input type="text" id="charsperpad" value="260" />
+<input type="text" id="padnumstart" value="0" />
+<input type="button" value="Create Pad" onClick="createPads();" />
+</body>
+</html>
