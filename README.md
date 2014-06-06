@@ -7,7 +7,7 @@ When communicating over an unsecure channel, in order to send a message, the fir
 
 #Complementary Pads
 
-Because substraction is tedious and for sake of simplicity, what would be greatly helpful is if *both* parties could simply use addition.
+Because substraction is tedious and for sake of simplicity, what would be greatly helpful is if *both* parties would simply use addition.
 
 Typically, the two copies of the shared secret key are identical. One is used for encryption by addition, and the other for decryption by substraction.
 
