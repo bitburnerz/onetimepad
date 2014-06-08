@@ -1,0 +1,115 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<script language="javascript" type="text/javascript">
+
+
+//=============================================================================
+// 
+//=============================================================================
+function convertUTF8() {
+	var utf8data = document.getElementById('utf8data').value;
+	
+	var outputstring = "";
+	var unicodepointnumber= "";
+
+	// clear output text areas
+	document.getElementById('outputdata').value = "";
+	document.getElementById('debugging').value = "";
+	
+	for(x=0; x < utf8data.length; x++) {
+    	unicodepointnumber = utf8data.charCodeAt(x);
+		//document.getElementById('debugging').value += "CPN" + unicodepointnumber + "(" + unicodepointnumber.toString(16) +") ";
+		
+		// convert from unicode point number to actual UTF-8 BCD
+		if(unicodepointnumber <= 127) {
+			outputstring += unicodepointnumber + " ";
+			
+		}
+		else if((unicodepointnumber >= 128) && (unicodepointnumber <= 2047)) {
+			var firstbyte = 192;			// 110x xxxx
+			var secondbyte = 128;			// 10xx xxxx
+			
+  			for(bitposition=0; bitposition < 11; bitposition++) {
+				var unicodepointbitweight = Math.pow(2, bitposition);
+				
+				if(bitposition < 6) {
+					var utfbytebitweight = unicodepointbitweight;
+
+					if((unicodepointnumber & unicodepointbitweight) != 0) { // test bit
+						secondbyte += utfbytebitweight;
+					}				
+				} 
+				else {
+					var utfbytebitweight = Math.pow(2, (bitposition-6));
+
+					if((unicodepointnumber & unicodepointbitweight) != 0) { // test bit
+						firstbyte += utfbytebitweight;
+					}							
+				}
+  			}
+						
+			outputstring += firstbyte + " " + secondbyte + " ";
+		}
+		/*
+		} else if((unicodepointnumber >= 2048) && (unicodepointnumber <= 65535)) {
+		
+		} else if((unicodepointnumber >= 65536) && (unicodepointnumber <= 2097151)) {
+		
+		} else if((unicodepointnumber >= 2097152) && (unicodepointnumber <= 67108863)) {
+		
+		} else if((unicodepointnumber >= 67108864) && (unicodepointnumber <= 2147483647)) {
+		
+		}*/
+		
+  	}
+	
+	var bcd = "";
+	var formatedoutputstring = "";
+	
+	for(x=0; x < outputstring.length; x++) {
+		
+		if(outputstring.charAt(x) != " ") {
+					
+			while(outputstring.charAt(x) != " ") {
+				bcd += outputstring.charAt(x);
+				x++;
+			}
+			
+			if(bcd.length == 1) {
+				formatedoutputstring += "00" + bcd;
+			}
+			else if (bcd.length == 2) {
+				formatedoutputstring += "0" + bcd;
+			}
+			else if (bcd.length == 3) {
+				formatedoutputstring += bcd;
+			}
+			
+			document.getElementById('outputdata').value += formatedoutputstring + " ";
+			
+			bcd = "";
+			formatedoutputstring = "";
+			}
+	}
+		
+}
+
+</script>
+<html>
+<head>
+<title>UTF8-to-Decimal Converter</title>
+</head>
+<body>
+
+<p>UTF8-to-Decimal Converter</p>
+
+<textarea id="utf8data" cols="80" rows="10" wrap="VIRTUAL"></textarea>
+<textarea id="outputdata" cols="80" rows="10" wrap="VIRTUAL"></textarea>
+<textarea id="debugging" cols="80" rows="10" wrap="VIRTUAL"></textarea>
+
+<input type="text" id="bytespergroup" value="2" />
+<input type="button" value="Convert" onclick="convertUTF8();" />
+</body>
+</html>
